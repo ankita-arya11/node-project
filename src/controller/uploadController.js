@@ -37,4 +37,4 @@ export const uploadFile = (req, res) => {
   });
 };
 
-export const uploadMiddleware = upload.single("profile"); 
+export const uploadMiddleware = upload.single("pro  file"); 

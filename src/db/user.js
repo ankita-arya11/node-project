@@ -1,5 +1,5 @@
 import { DataTypes, Model } from  'sequelize';
-import sequelize from "../db/index.db.js";
+import sequelize from "./index.db.js";
 // import Otp from "../models/otp.model.js"; 
 
 class User extends Model {}
@@ -33,13 +33,11 @@ User.init(
               allowNull: true,
           }
         },
-       { 
+        {
           sequelize,
-          modelName: 'user_tb'
-      },
+          modelName: 'user_tb',
+          timestamps: true,
+        } 
 )
-
-// User.hasOne(Otp, { foreignKey: 'email', sourceKey: 'email' });
-// Otp.belongsTo(User, { foreignKey: 'email', targetKey: 'email' });
 
 export default User;

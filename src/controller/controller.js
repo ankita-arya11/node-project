@@ -1,54 +1,9 @@
 import { Op } from "sequelize";
-import User from "../db/model.js";
+import User from "../db/user.js";
 import jwt from 'jsonwebtoken';
 import path from "path";
 import fs from 'fs';
-import { getLocalIP } from "../../retriveIp.js";
-
-
-// export const createUser = async (req, res) => {
-//   try {
-//       const { name, email, phone, age } = req.body;
-//       const profile = req.file ? `/uploads/${req.file.filename}` : null; 
-
-//       if (!name || !email || !phone || !age) {
-//           return res.status(400).json({ message: "All fields are required" });
-//       }
-
-//       const ageNumber = Number(age);
-//       if (isNaN(ageNumber) || ageNumber <= 0) {
-//         return res.status(400).json({ message: "Age must be a valid number" });
-//       }
-
-//       if (!/^\d{10}$/.test(phone)) {
-//           return res.status(400).json({ message: "Invalid phone number" });
-//       }
-
-//       const existingUser = await User.findOne({ where: { email } });
-
-//       if (!existingUser) {
-//           return res.status(400).json({ message: "Email not found. Please verify OTP first." });
-//       }
-
-//       if (existingUser.name || existingUser.phone || existingUser.age) {
-//           return res.status(400).json({ message: "User details already exist" });
-//       }
-
-//       existingUser.name = name;
-//       existingUser.phone = phone;
-//       existingUser.age = age;
-//       existingUser.profile = profile;
-
-//       await existingUser.save();
-
-//       return res.status(200).json({ message: "User details updated successfully", data: existingUser });
-
-//   } catch (error) {
-//       console.error(error);
-//       return res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
-
+import { getLocalIP } from "../../retrieveIp.js";
 
 
 export const getUser = async (req, res) => {
@@ -154,7 +109,7 @@ export const updateUser = async (req, res) => {
 
         return res.status(200).json({ message: "User data updated successfully", data: user });
     } catch (error) {
-        console.error("Error updating user:", error);
+        // console.error("Error updating user:", error);
         if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
             return res.status(401).json({ message: "Invalid or expired token" });
         }

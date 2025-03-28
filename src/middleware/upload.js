@@ -19,4 +19,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+//express error handling middleware
+export const multerErrorHandler = (err, req, res, next) => {
+    if(err instanceof multer.MulterError) {
+        return res.status(400).json({ message: "Unexpected file error" });
+    } else if (err){
+        return res.status(400).json({ message: err.message });
+    }
+    next();
+}
+
 export default upload;
