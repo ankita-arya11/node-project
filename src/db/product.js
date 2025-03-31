@@ -15,7 +15,7 @@ Product.init(
       type: DataTypes.STRING,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     price: {
       type: DataTypes.FLOAT,
@@ -34,7 +34,9 @@ Product.init(
   },
   {
     sequelize,
-    modelName: 'product',
+    modelName: 'Product',
+    tableName: 'product_tb',
+    timestamps: true
   }
 );
 

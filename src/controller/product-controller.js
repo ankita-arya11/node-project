@@ -31,3 +31,23 @@ export const addProduct = async (req, res) => {
         res.status(500).json({ message: 'failed to add product', error: err.message })
     }
 }
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findByPk(id);
+        
+        if(!product){
+            return res.status(404).json({ message: 'product not found' })
+        }
+        await product.destroy();
+
+        res.status(200).json({ message: 'pdroduct deleted successfully' })
+    } catch (err) {
+        res.status(500).json({ message: 'failed to delete product', error: err.message })
+    }
+}
+
+// export const updateProduct = async (req, res) => {
+
+// }

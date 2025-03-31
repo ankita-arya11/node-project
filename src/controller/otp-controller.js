@@ -1,7 +1,7 @@
 import Otp from "../db/otp.js";
 import User from "../db/user.js";
 import bcrypt from "bcryptjs";
-import sendOtpEmail from "./emailService.js";
+import sendOtpEmail from "../common/email-service.js";
 import jwt from 'jsonwebtoken';
 
 
@@ -49,7 +49,7 @@ export const verifyOtp = async (req, res) => {
 
         await Otp.destroy({ where: { email } }); 
 
-        return res.status(200).json({ message: "OTP verified, user registered", data: user });
+        return res.status(200).json({ message: "OTP verified, user registered"});
     } catch (error) {
         console.error("Error verifying OTP:", error);
         return res.status(500).json({ message: "Internal Server Error" });
@@ -91,7 +91,7 @@ export const signUp = async (req, res) => {
             { where: { email } }
         );
 
-        return res.status(200).json({ message: "User signed up successfully" });
+        return res.status(200).json({ message: "User signed up successfully",  data: isUser  });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });

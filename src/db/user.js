@@ -18,6 +18,7 @@ User.init(
           },
           email: {
               type: DataTypes.STRING,
+              unique: true
           },
           password: {
             type: DataTypes.STRING
@@ -35,7 +36,8 @@ User.init(
         },
         {
           sequelize,
-          modelName: 'user_tb',
+          modelName: 'User',
+          tableName: 'user_tb',
           timestamps: true,
         } 
 )

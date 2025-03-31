@@ -3,7 +3,8 @@ import User from "../db/user.js";
 import jwt from 'jsonwebtoken';
 import path from "path";
 import fs from 'fs';
-import { getLocalIP } from "../../retrieveIp.js";
+import { getLocalIP } from "../common/retrieveIp.js";
+
 
 
 export const getUser = async (req, res) => {

@@ -3,6 +3,7 @@ import Order from "./order";
 import OrderItem from "./orderItem";
 import Product from "./product";
 import User from "./user";
+import Otp from "./otp";
 
 
 User.hasMany(Cart, { foreignKey: 'userId' });
@@ -19,3 +20,5 @@ Cart.belongsTo(Product, { foreignKey: 'productId' });
 
 Product.hasMany(OrderItem, { foreignKey: 'productId' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
+
+export { User, Product, Cart, Order, OrderItem, Otp };

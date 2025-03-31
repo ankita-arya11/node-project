@@ -2,12 +2,12 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import sequelize from './src/db/index.db.js';  
+import sequelize from './src/db/index.db.js';
 import router from './src/route/route.js';
-
 import dotenv from "dotenv";
-dotenv.config();
 
+
+dotenv.config();
 
 const app = express();
 
@@ -31,13 +31,12 @@ async function connectDb() {
     try {
         await sequelize.authenticate();
         console.log("✅ DB connected successfully");
-        await sequelize.sync({ force: false });
+        await sequelize.sync({ alter: true });
     } catch (error) {
         console.error("❌ DB Connection Failed:", error);
         process.exit(1); 
     }
 }
-
 connectDb();
 
 app.listen(PORT, () => {
