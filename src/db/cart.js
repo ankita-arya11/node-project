@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "./index.db.js";
+import sequelize from './db.js';
+import Product from "./product.js";
+import User from "./user.js";
 
 class Cart extends Model {}
 
@@ -14,11 +16,6 @@ Cart.init(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "user_tb", 
-        key: "id",
-      },
-      onDelete: "CASCADE",
     },
     productId: {
       type: DataTypes.INTEGER,
@@ -37,6 +34,9 @@ Cart.init(
     timestamps: true,
   }
 );
+
+Cart.belongsTo(User, { foreignKey: 'userId', onDelete: "CASCADE" });
+Cart.belongsTo(Product, { foreignKey: 'productId' });
 
 export default Cart;
 

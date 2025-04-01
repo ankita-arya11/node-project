@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "./index.db.js";
+import sequelize from './db.js';
+import Order from "./order.js";
+import Product from "./product.js";
 
 class OrderItem extends Model {}
 
@@ -14,25 +16,15 @@ OrderItem.init(
     orderId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "order_tb",
-        key: "id",
-      },
-      onDelete: "CASCADE",
     },
     productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "product_tb",
-        key: "id",
-      },
-      onDelete: "CASCADE",
     },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
+      defaultValue: 0,
     },
     price: {
       type: DataTypes.FLOAT,
@@ -46,5 +38,8 @@ OrderItem.init(
     timestamps: true,
   }
 );
+
+OrderItem.belongsTo(Order, { foreignKey: 'orderId', onDelete: "CASCADE" });
+OrderItem.belongsTo(Product, { foreignKey: 'productId',   onDelete: "CASCADE" });
 
 export default OrderItem;

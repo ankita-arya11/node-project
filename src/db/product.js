@@ -1,5 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from './index.db.js';
+import sequelize from './db.js';
+import Cart from './cart.js';
+import OrderItem from './orderItem.js';
 
 class Product extends Model {}
 
@@ -39,5 +41,8 @@ Product.init(
     timestamps: true
   }
 );
+
+Product.hasMany(Cart, { foreignKey: 'productId' });
+Product.hasMany(OrderItem, { foreignKey: 'productId' });
 
 export default Product;

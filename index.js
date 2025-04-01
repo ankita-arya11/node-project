@@ -2,9 +2,9 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import sequelize from './src/db/index.db.js';
 import router from './src/route/route.js';
 import dotenv from "dotenv";
+import { connectDb } from './src/db/db.js';
 
 
 dotenv.config();
@@ -27,17 +27,7 @@ app.use("/uploads", express.static(uploadsDir));
 
 const PORT = 5000;
 
-async function connectDb() {
-    try {
-        await sequelize.authenticate();
-        console.log("✅ DB connected successfully");
-        await sequelize.sync({ alter: true });
-    } catch (error) {
-        console.error("❌ DB Connection Failed:", error);
-        process.exit(1); 
-    }
-}
-connectDb();
+connectDb()
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is listening on port ${PORT}`);

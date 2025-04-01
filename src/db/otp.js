@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from './index.db.js';
+import sequelize from './db.js';
 
 class Otp extends Model {}
 
