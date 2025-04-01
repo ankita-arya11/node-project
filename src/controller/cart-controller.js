@@ -20,13 +20,20 @@ export const addToCart = async (req, res) => {
     }
 };
 
+
 export const fetchCart = async (req, res) => {
     try {
         const userId = req.user.id; 
 
         const cartItems = await Cart.findAll({
             where: { userId },
-            include: [{ model: Product, attributes: ["id", "name", "price"] }],
+            include: [
+                {
+                    model: Product,
+                    attributes: ["title", "price", "description", "category", "image", "rating"]
+                }
+            ],
+            attributes: ["id", "quantity", "productId"]
         });
 
         return res.status(200).json({ cartItems });
@@ -34,3 +41,29 @@ export const fetchCart = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch cart", error: err.message });
     }
 };
+
+
+export const removeFromCart = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const  userId  = req.user.id;
+        // console.log(req.user);
+
+        const cartItem = await Cart.findOne({ where : {userId, productId}})
+
+        if(!cartItem){
+            return res.status(404).json({ message: "product not found in cart" })
+        }
+
+        if (cartItem.quantity > 1) {
+            await cartItem.update({ quantity: cartItem.quantity - 1 });
+        } else {
+            await cartItem.destroy();
+        }
+
+        return res.status(200).json({ message: "product removed from cart successfully" })
+
+    } catch (err) {
+        res.status(500).json({ message: "failed to remove from cart", error: err.message })
+    }
+}

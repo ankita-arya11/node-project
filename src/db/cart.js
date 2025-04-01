@@ -1,5 +1,4 @@
 import { DataTypes, Model } from 'sequelize';
-
 class Cart extends Model {
   static initModel(sequelize) {
     Cart.init(

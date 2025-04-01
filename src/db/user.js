@@ -12,7 +12,6 @@ class User extends Model {
         },
         name: {
           type: DataTypes.STRING,
-          allowNull: false,
         },
         email: {
           type: DataTypes.STRING,
@@ -21,7 +20,6 @@ class User extends Model {
         },
         password: {
           type: DataTypes.STRING,
-          allowNull: false,
         },
         phone: {
           type: DataTypes.STRING,

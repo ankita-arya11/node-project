@@ -1,13 +1,10 @@
 import { Sequelize } from "sequelize";
 import dotenv from 'dotenv';
-
-// Import models (without initializing associations yet)
 import User from './user.js';
 import Cart from './cart.js';
 import Order from './order.js';
 import OrderItem from './orderItem.js';
 import Product from './product.js';
-import Otp from './otp.js';
 
 dotenv.config();
 
@@ -36,12 +33,21 @@ Order.associate(sequelize.models);
 OrderItem.associate(sequelize.models);
 
 
+
+// Define associations after models are initialized
+User.associate(sequelize.models);
+Product.associate(sequelize.models);
+Cart.associate(sequelize.models);
+Order.associate(sequelize.models);
+OrderItem.associate(sequelize.models);
+
+
 // Function to connect to the database
 export async function connectDb() {
     try {
         await sequelize.authenticate();
         console.log("✅ DB connected successfully");
-        await sequelize.sync({ force: true });  // or use { alter: true } in production
+        await sequelize.sync({ alter: true });  
     } catch (error) {
         console.error("❌ DB Connection Failed:", error);
         process.exit(1); 

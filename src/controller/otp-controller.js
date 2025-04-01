@@ -3,6 +3,7 @@ import User from "../db/user.js";
 import bcrypt from "bcryptjs";
 import sendOtpEmail from "../common/email-service.js";
 import jwt from 'jsonwebtoken';
+import { getLocalIP } from "../common/retrieveIp.js";
 
 
 export const sendOtp = async (req, res) => {
@@ -29,7 +30,6 @@ export const sendOtp = async (req, res) => {
         return res.status(500).json({ message: "Failed to send OTP" });
     }
 };
-
 
 
 export const verifyOtp = async (req, res) => {
@@ -60,8 +60,9 @@ export const verifyOtp = async (req, res) => {
 export const signUp = async (req, res) => {
     try {
         const { name, email, password, phone, age } = req.body;
-        const profile = req.file ? `/uploads/${req.file.filename}` : null; 
-        
+        const serverUrl = getLocalIP()
+        const profile = req.file ? `http://${serverUrl}:5000/uploads/${req.file.filename}` : null;
+
         if (!name || !password || !email || !phone || !age) {
             return res.status(400).json({ message: "All fields are required" });
         }
@@ -80,8 +81,14 @@ export const signUp = async (req, res) => {
             return res.status(400).json({ message: "User is not verified" });
         }
 
+        const existingPhoneUser = await User.findOne({ where: { phone } });
+
+        if (existingPhoneUser && existingPhoneUser.email !== email) {
+            return res.status(400).json({ message: "Phone number is already in use. Please provide a unique phone number." });
+        }
+
         if (isUser.password) {
-            return res.status(400).json({ message: "User already signed up. Please update your details instead." });
+            return res.status(400).json({ message: "User already signed up. Please login!" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -91,12 +98,16 @@ export const signUp = async (req, res) => {
             { where: { email } }
         );
 
-        return res.status(200).json({ message: "User signed up successfully",  data: isUser  });
+        const updatedUser = await User.findOne({ where: { email } });
+
+        return res.status(200).json({ message: "User signed up successfully", data: updatedUser });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
 
 
 export const login = async (req, res) => {
