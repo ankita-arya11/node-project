@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Product from '../db/product.js';
+import { getLocalIP } from '../common/retrieveIp.js';
 
 export const fetchProducts = async (req, res) => {
     try {
@@ -12,7 +13,11 @@ export const fetchProducts = async (req, res) => {
 
 export const addProduct = async (req, res) => {
     try {
-        const { title, description, price, category, image, rating } = req.body
+        const { title, description, price, category, rating } = req.body
+        const serverUrl = getLocalIP()
+        const image = req.file 
+                        ? `http://${serverUrl}:5000/uploads/${req.file.filename}`
+                        : null
 
         const newProduct = await Product.create({
             title,
@@ -48,6 +53,3 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
-// export const updateProduct = async (req, res) => {
-
-// }

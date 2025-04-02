@@ -16,7 +16,7 @@ class Order extends Model {
         },
         totalAmount: {
           type: DataTypes.FLOAT,
-          allowNull: false,
+          allowNull: true,
         },
         status: {
           type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),

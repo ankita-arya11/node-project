@@ -30,6 +30,10 @@ class Product extends Model {
           type: DataTypes.FLOAT,
           allowNull: true,
         },
+        stock: {
+          type: DataTypes.INTEGER,
+          allowNull: true
+        }
       },
       {
         sequelize,

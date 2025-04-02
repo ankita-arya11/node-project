@@ -6,6 +6,7 @@ import { deleteUser, getAllUsers, getUser, updateUser } from "../controller/user
 import { addProduct, deleteProduct, fetchProducts } from "../controller/product-controller.js";
 import { addToCart, fetchCart, removeFromCart } from "../controller/cart-controller.js";
 import authenticateUser from "../middleware/authMiddleware.js";
+import { fetchOrderDetails, placeOrder } from "../controller/order-controller.js";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.delete("/delete-product/:id", deleteProduct)
 router.post("/add-to-cart", authenticateUser, addToCart)
 router.get("/fetch-cart", authenticateUser, fetchCart)
 router.delete("/remove-from-cart/:productId", authenticateUser, removeFromCart)
-
+router.post("/place-order",authenticateUser, placeOrder);
+router.get("/fetch-order-details", authenticateUser, fetchOrderDetails)
 
 export default router;

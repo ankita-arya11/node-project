@@ -3,22 +3,31 @@ import Product from "../db/product.js";
 
 export const addToCart = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const { productId } = req.body;
-
-        let cartItem = await Cart.findOne({ where: { userId, productId } });
-
-        if (cartItem) {
-            await cartItem.update({ quantity: cartItem.quantity + 1 });
-        } else {
-            cartItem = await Cart.create({ userId, productId, quantity: 1 });
-        }
-
-        return res.status(201).json({ message: "Product added to cart successfully", cartItem });
+      const userId = req.user.id;
+      const { productId } = req.body;
+  
+      const product = await Product.findByPk(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      if(product.stock === 0){
+        return res.status(404).json({ message: "stock is unavailable"})
+      }
+  
+      let cartItem = await Cart.findOne({ where: { userId, productId } });
+  
+      if (cartItem) {
+        await cartItem.update({ quantity: cartItem.quantity + 1 })
+        await product.update({ stock: product.stock - 1 })
+      } else {
+        cartItem = await Cart.create({ userId, productId, quantity: 1 });
+      }
+  
+      return res.status(201).json({ message: "Product added to cart successfully", cartItem });
     } catch (err) {
-        res.status(500).json({ message: "Failed to add product to cart", error: err.message });
+      return res.status(500).json({ message: "Failed to add product to cart", error: err.message });
     }
-};
+  };
 
 
 export const fetchCart = async (req, res) => {
@@ -36,7 +45,7 @@ export const fetchCart = async (req, res) => {
             attributes: ["id", "quantity", "productId"]
         });
 
-        return res.status(200).json({ cartItems });
+        return res.status(200).json({ message: "No product is added to cart.", cartItems });
     } catch (err) {
         res.status(500).json({ message: "Failed to fetch cart", error: err.message });
     }
@@ -52,7 +61,7 @@ export const removeFromCart = async (req, res) => {
         const cartItem = await Cart.findOne({ where : {userId, productId}})
 
         if(!cartItem){
-            return res.status(404).json({ message: "product not found in cart" })
+            return res.status(404).json({ message: "Cart is empty." })
         }
 
         if (cartItem.quantity > 1) {
