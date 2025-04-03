@@ -1,2 +1,2 @@
 .env
-/index.db.js
+node_modules/
