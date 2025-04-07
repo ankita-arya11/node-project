@@ -58,3 +58,12 @@ This is the backend for the **E-Shop** project — a simple e-commerce system bu
     pg
     dotenv
   
+
+## **env example**
+
+BREVO_API_KEY = 
+JWT_SECRET = 
+DB_NAME = 
+DB_USER = 
+DB_PASSWORD = 
+DB_HOST = 
