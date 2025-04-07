@@ -54,18 +54,6 @@ export const placeOrder = async (req, res) => {
     }
   };
   
-  
-
-export const getOrders = async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const orders = await Order.findAll({ where: { userId } });
-      return res.status(200).json({ orders });
-    } catch (error) {
-      return res.status(500).json({ message: "Unable to retrieve orders", error: error.message });
-    }
-  };
-
 
 export const getOrderById = async (req, res) => {
     try {
@@ -85,24 +73,8 @@ export const getOrderById = async (req, res) => {
       return res.status(500).json({ message: "Unable to retrieve order", error: error.message });
     }
   };
-
-
-  export const updateOrderStatus = async (req, res) => {
-    try {
-      const { orderId } = req.params;
-      const { status } = req.body;
-      const order = await Order.findOne({ where: { id: orderId, userId: req.user.id } });
-      if (!order) return res.status(404).json({ message: "Order not found" });
-      await order.update({ status });
-      return res.status(200).json({ message: "Order status updated", order });
-    } catch (error) {
-      return res.status(500).json({ message: "Failed to update order status", error: error.message });
-    }
-  };
-
   
 
-//fetch order details
 export const fetchOrderDetails = async (req, res) => {
     try {
       const userId = req.user.id;
@@ -129,10 +101,8 @@ export const fetchOrderDetails = async (req, res) => {
     }
   };
   
-
-
-
-  export const deleteOrder = async (req, res) => {
+  
+  export const cancelOrder = async (req, res) => {
     try {
       const { orderId } = req.params;
       const userId = req.user.id;

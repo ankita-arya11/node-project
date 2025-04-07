@@ -6,7 +6,7 @@ import { deleteUser, getAllUsers, getUser, updateUser } from "../controller/user
 import { addProduct, deleteProduct, fetchProducts } from "../controller/product-controller.js";
 import { addToCart, fetchCart, removeFromCart } from "../controller/cart-controller.js";
 import authenticateUser from "../middleware/authMiddleware.js";
-import { fetchOrderDetails, placeOrder, getOrders } from "../controller/order-controller.js";
+import { fetchOrderDetails, placeOrder, getOrderById, cancelOrder } from "../controller/order-controller.js";
 
 const router = express.Router();
 
@@ -18,18 +18,16 @@ router.get("/get-user/:id", getUser)
 router.get("/users", getAllUsers)
 router.delete("/delete-user/:id", deleteUser)
 router.patch('/update/:id',authenticateUser, uploadMiddleware, updateUser, multerErrorHandler)
-//products api
 router.get("/products", fetchProducts)
 router.post("/add-product", addProduct)
 router.delete("/delete-product/:id", deleteProduct)
-//cart api
 router.post("/add-to-cart", authenticateUser, addToCart)
 router.get("/fetch-cart", authenticateUser, fetchCart)
 router.delete("/remove-from-cart/:productId", authenticateUser, removeFromCart)
-//order api
 router.post("/place-order", authenticateUser, placeOrder)
 router.get("/fetch-order-details", authenticateUser, fetchOrderDetails)
-router.get("/get-orders", getOrders);
+router.get("/get-order/:orderId", authenticateUser, getOrderById)
+router.delete("/cancel-order/:orderId", authenticateUser, cancelOrder)
 
 
 export default router;
