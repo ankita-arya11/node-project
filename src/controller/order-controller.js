@@ -75,6 +75,27 @@ export const getOrderById = async (req, res) => {
   };
   
 
+// export const getOrders = async (req, res) => {
+//     try {
+//       const userId = req.user.id;
+
+//       const orders = await Order.findAll({ where: { userId } });
+
+//       if (!orders) {
+//         return res.status(404).json({ message: "No order found for this user" });
+//       }
+//       const orderIds = orders.map(order => order.id)
+  
+//       const orderItems = await OrderItem.findAll( { where: { orderId: orderIds } })
+
+//       return res.status(200).json({ orderItems });
+
+//     } catch (error) {
+//       return res.status(500).json({ message: "Unable to retrieve orders", error: error.message });
+//     }
+//   };
+
+
 export const fetchOrderDetails = async (req, res) => {
     try {
       const userId = req.user.id;
@@ -101,7 +122,6 @@ export const fetchOrderDetails = async (req, res) => {
     }
   };
   
-  
   export const cancelOrder = async (req, res) => {
     try {
       const { orderId } = req.params;
@@ -112,7 +132,7 @@ export const fetchOrderDetails = async (req, res) => {
         return res.status(404).json({ message: "Order not found" });
       }
   
-      await OrderItem.destroy({ where: { orderId: order.id } });
+      await OrderItem.destroy({ where: { orderId: order.id } }); 
       await order.destroy();
   
       return res.status(200).json({ message: "Order deleted successfully" });
@@ -120,5 +140,8 @@ export const fetchOrderDetails = async (req, res) => {
       return res.status(500).json({ message: "Failed to delete order", error: error.message });
     }
   };
+
+
+
 
 

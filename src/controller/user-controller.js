@@ -1,10 +1,9 @@
 import { Op } from "sequelize";
 import User from "../db/user.js";
-import jwt from 'jsonwebtoken';
 import path from "path";
 import fs from 'fs';
+import bcrypt from "bcryptjs";
 import { getLocalIP } from "../common/retrieveIp.js";
-
 
 
 export const getUser = async (req, res) => {
@@ -61,39 +60,24 @@ export const deleteUser = async (req, res) => {
 
 
 
-export const updateUser = async (req, res) => {
+// ======================================================================================================================
+
+
+
+
+
+export const updateUser = async (req, res, next) => {
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: "Unauthorized. No token provided" });
-        }
-
-        const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
-        const userId = decoded.id;
-
-        const { name, phone, age } = req.body;
+        const userId = req.user.id;
+        const { name, phone, age, password } = req.body;
+        const serverUrl = getLocalIP()
+        const profile = req.file ? `http://${serverUrl}:${process.env.PORT}/uploads/${req.file.filename}` : null;
 
         const user = await User.findByPk(userId);
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        let profile = user.profile;
-        if (req.file) {
-            const serverIP = getLocalIP();
-            const serverUrl = `${req.protocol}://${serverIP}:5000`;
-            profile = `${serverUrl}/uploads/${req.file.filename}`;
-
-            if (user.profile) {
-                const oldProfilePath = path.join('uploads', path.basename(user.profile));
-                if (fs.existsSync(oldProfilePath)) {
-                    fs.unlinkSync(oldProfilePath);
-                }
-            }
-        }
-
-        if (req.body.email && req.body.email !== user.email) {
-            return res.status(400).json({ message: "Email cannot be changed" });
+            const error = new Error("User not found");
+            error.status = 404;
+            return next(error);
         }
 
         if (phone) {
@@ -102,18 +86,27 @@ export const updateUser = async (req, res) => {
             });
 
             if (existingMobile) {
-                return res.status(400).json({ message: "User with this mobile number already exists" });
+                const error = new Error("User with this mobile number already exists");
+                error.status = 400;
+                return next(error);
             }
         }
 
-        await user.update({ name, phone, age, profile });
+        const updateData = {};
+
+        if (name && name.trim() !== "") updateData.name = name;
+        if (phone && phone.trim() !== "") updateData.phone = phone;
+        if (age && age !== "") updateData.age = age;
+        if (password && password.trim() !== "") {
+            updateData.password = await bcrypt.hash(password, 10);
+        }
+
+        updateData.profile = profile;
+
+        await user.update(updateData);
 
         return res.status(200).json({ message: "User data updated successfully", data: user });
     } catch (error) {
-        // console.error("Error updating user:", error);
-        if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
-            return res.status(401).json({ message: "Invalid or expired token" });
-        }
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 };

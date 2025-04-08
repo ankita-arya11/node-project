@@ -2,6 +2,9 @@
 
 This is the backend for the **E-Shop** project — a simple e-commerce system built using Node.js and PostgreSQL. It manages users, products, carts, and orders efficiently with a clean architecture.
 
+## *Nodejs version*
+v22.14.0
+
 ## 🚀 Features
 
 - User Authentication with OTP

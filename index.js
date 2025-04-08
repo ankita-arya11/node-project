@@ -24,12 +24,9 @@ if (!fs.existsSync(uploadsDir)) {
 
 app.use("/uploads", express.static(uploadsDir));
 
-
-const PORT = 5000;
-
 connectDb()
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server is listening on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+    console.log(`🚀 Server is listening on port ${process.env.PORT}`);
 });
 
