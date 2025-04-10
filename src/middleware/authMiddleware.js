@@ -19,9 +19,9 @@ export default authenticateUser;
 
 //express error handling middleware
 export const multerErrorHandler = (err, req, res, next) => {
-    if(err instanceof multer.MulterError) {
+    if (err instanceof multer.MulterError) {
         return res.status(400).json({ message: "Unexpected file error" });
-    } else if (err){
+    } else if (err) {
         return res.status(400).json({ message: err.message });
     }
     next();

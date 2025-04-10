@@ -6,24 +6,32 @@ import { addProduct, allProducts, deleteProduct, fetchProducts } from "../contro
 import { addToCart, fetchCart, removeFromCart } from "../controller/cart-controller.js";
 import authenticateUser, { multerErrorHandler, updateUserErrorHandler } from "../middleware/authMiddleware.js";
 import { fetchOrderDetails, placeOrder, getOrderById, cancelOrder } from "../controller/order-controller.js";
+import { validateRequest } from "../validations/validateRequest.js";
+import { userSchema } from "../validations/user.schema.js";
+import { removeFromCartSchema } from "../validations/cart.schema.js";
 
 const router = express.Router();
 
 router.post("/send-otp", sendOtp)
 router.post("/verify-otp", verifyOtp);
-router.post("/signup",uploadMiddleware, signUp)
+router.post("/signup", uploadMiddleware, signUp)
 router.post("/login", login)
 router.get("/get-user/:id", getUser)
 router.get("/users", getAllUsers)
 router.delete("/delete-user/:id", deleteUser)
-router.patch('/update',authenticateUser, uploadMiddleware, updateUser, multerErrorHandler, updateUserErrorHandler)
+router.patch('/update', authenticateUser, 
+    uploadMiddleware, 
+    updateUser,
+    validateRequest(userSchema), 
+    multerErrorHandler, 
+    updateUserErrorHandler)
 router.get("/products", fetchProducts)
 router.get("/all-products", allProducts)
 router.post("/add-product", addProduct)
 router.delete("/delete-product/:id", deleteProduct)
 router.post("/add-to-cart", authenticateUser, addToCart)
 router.get("/fetch-cart", authenticateUser, fetchCart)
-router.delete("/remove-from-cart/:productId", authenticateUser, removeFromCart)
+router.delete("/remove-from-cart/:productId", authenticateUser, validateRequest(removeFromCartSchema), removeFromCart)
 router.post("/place-order", authenticateUser, placeOrder)
 router.get("/fetch-order-details", authenticateUser, fetchOrderDetails)
 router.get("/get-order/:orderId", authenticateUser, getOrderById)

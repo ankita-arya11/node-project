@@ -1,7 +1,5 @@
 import { Op } from "sequelize";
 import User from "../db/user.js";
-import path from "path";
-import fs from 'fs';
 import bcrypt from "bcryptjs";
 import { getLocalIP } from "../common/retrieveIp.js";
 
@@ -57,13 +55,6 @@ export const deleteUser = async (req, res) => {
       return res.status(500).json({ message: "User could not be deleted" });
   }
 };
-
-
-
-// ======================================================================================================================
-
-
-
 
 
 export const updateUser = async (req, res, next) => {
