@@ -1,9 +1,9 @@
 import Otp from "../db/otp.js";
 import User from "../db/user.js";
 import bcrypt from "bcryptjs";
-import sendOtpEmail from "../common/email-service.js";
 import jwt from 'jsonwebtoken';
 import { getLocalIP } from "../common/retrieveIp.js";
+import { sendEmail } from "../common/email-service.js";
 
 
 export const sendOtp = async (req, res) => {
@@ -22,12 +22,17 @@ export const sendOtp = async (req, res) => {
             expiresAt 
         });
 
-        await sendOtpEmail(email, otp);
+        await sendEmail({
+            to: email,
+            subject: "Your OTP Code",
+            text: `Your OTP is: ${otp}`,
+            html: `<p>Your OTP is: <strong>${otp}</strong></p>`,
+          });          
 
         return res.status(200).json({ message: "OTP sent successfully" });
     } catch (error) {
         console.error("Error in OTP API:", error);
-        return res.status(500).json({ message: "Failed to send OTP" });
+        return res.status(500).json({ message: "Failed to send OTP", error: error.message });
     }
 };
 
