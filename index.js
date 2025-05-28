@@ -9,6 +9,8 @@ import { connectDb } from './src/db/db.js';
 
 dotenv.config();
 
+
+
 const app = express();
 
 app.use(express.json());
@@ -30,6 +32,7 @@ app.use("/uploads", express.static(uploadsDir));
 connectDb()
 
 app.listen(process.env.PORT, () => {
+  console.log(PORT, "port..");
     console.log(`🚀 Server is listening on port ${process.env.PORT}`);
 });
 
