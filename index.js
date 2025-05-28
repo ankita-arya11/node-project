@@ -32,7 +32,7 @@ app.use("/uploads", express.static(uploadsDir));
 connectDb()
 
 app.listen(process.env.PORT, () => {
-  console.log(PORT, "port..");
+  console.log(process.env.PORT, "port..");
     console.log(`🚀 Server is listening on port ${process.env.PORT}`);
 });
 
