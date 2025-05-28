@@ -43,15 +43,33 @@ OrderItem.associate(sequelize.models);
 
 
 // Function to connect to the database
-export async function connectDb() {
+// export async function connectDb() {
+//     try {
+//         await sequelize.authenticate();
+//         console.log("✅ DB connected successfully");
+//         await sequelize.sync({ alter: true });  
+//     } catch (error) {
+//         console.error("❌ DB Connection Failed:", error);
+//         process.exit(1); 
+//     }
+// }
+
+
+
+export const connectDb = async () => {
+  const MAX_RETRIES = 10;
+  let retries = 0;
+  while (retries < MAX_RETRIES) {
     try {
-        await sequelize.authenticate();
-        console.log("✅ DB connected successfully");
-        await sequelize.sync({ alter: true });  
-    } catch (error) {
-        console.error("❌ DB Connection Failed:", error);
-        process.exit(1); 
+      await sequelize.authenticate();
+      console.log('✅ DB connected');
+      break;
+    } catch (err) {
+      console.error(`❌ DB connection failed (attempt ${retries + 1}):`, err.message);
+      retries++;
+      await new Promise(res => setTimeout(res, 5000)); 
     }
-}
+  }
+};
 
 export default sequelize;
