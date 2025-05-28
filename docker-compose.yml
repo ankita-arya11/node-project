@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:15
@@ -8,7 +10,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
-      - "5434:5432"
+      - "5432:5432"
 
   backend:
     build: .
@@ -18,10 +20,3 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: 123456
-      DB_NAME: eshop_db
-      PORT: 8000
