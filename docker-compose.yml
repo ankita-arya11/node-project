@@ -1,22 +1,24 @@
 version: '3.8'
-services:
-  backend:
-    build: .
-    ports:
-      - '8000:8000'
-    # env_file:
-    #   - .env
-    depends_on:
-      - postgres
-    volumes:
-      - /app/node_modules
 
-  db:
+services:
+  postgres:
     image: postgres:15
+    container_name: eshop-postgres
     restart: always
     environment:
+      POSTGRES_DB: eshop_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: eshop_db
     ports:
-      - '5434:5432'
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: eshop-backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
