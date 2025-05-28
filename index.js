@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.use("/api", router);
 app.get('/', (req, res) => {
-  res.send('Hello I am ankita!!!!');
+  res.send('Hello I am server!!!!');
 });
 
 const __filename = fileURLToPath(import.meta.url);
