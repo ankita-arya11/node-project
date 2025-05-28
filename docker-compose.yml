@@ -10,14 +10,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
-      - "5432:5432"
+      - "5434:5432"
 
   backend:
     build: .
     container_name: eshop-backend
     restart: always
-    env_file:
-      - .env
     ports:
       - "8000:8000"
     depends_on:
