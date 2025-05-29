@@ -6,7 +6,7 @@ services:
     container_name: eshop-postgres
     restart: always
     environment:
-      POSTGRES_DB: eshop_db
+      POSTGRES_DB: eshop
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
